@@ -53,6 +53,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 const PAGE_SIZE = 10;
 
@@ -72,6 +73,7 @@ export function EquipmentTable({
     loading,
     onRefresh,
 }: EquipmentTableProps) {
+    const router = useRouter();
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState<EquipmentStatus | "All">("All");
     const [typeFilter, setTypeFilter] = useState<string>("All");
@@ -338,8 +340,7 @@ export function EquipmentTable({
                                                             size="icon"
                                                             className="h-8 w-8"
                                                             onClick={() => {
-                                                                setSheetTarget(eq);
-                                                                setSheetOpen(true);
+                                                                router.push(`/equipment/${eq.id}`);
                                                             }}
                                                         >
                                                             <Eye className="h-4 w-4" />

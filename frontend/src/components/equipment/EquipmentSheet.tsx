@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { FlaskConical, Hash, Clock, ShieldCheck, Activity, History, PenLine } from "lucide-react";
 import { getMaintenanceLogs } from "@/lib/api";
 import type { Equipment, MaintenanceLog } from "@/lib/types";
 import { formatDate, getHealthScore, daysSinceDate } from "@/lib/dateUtils";
@@ -90,48 +91,69 @@ export function EquipmentSheet({
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent className="w-full overflow-y-auto sm:max-w-lg">
-                <SheetHeader className="mb-4">
-                    <SheetTitle className="text-lg">{equipment.name}</SheetTitle>
-                    <div className="flex flex-wrap items-center gap-2">
-                        <StatusBadge status={equipment.status} />
-                        <span className="text-sm text-muted-foreground">
-                            {equipment.typeName}
-                        </span>
+            <SheetContent className="w-full sm:max-w-md overflow-y-auto">
+                <SheetHeader className="mb-6 mt-2">
+                    <div className="flex items-start gap-4">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border bg-muted/50 text-foreground">
+                            <FlaskConical className="h-6 w-6" />
+                        </div>
+                        <div className="space-y-1 text-left">
+                            <SheetTitle className="text-xl tracking-tight leading-none">{equipment.name}</SheetTitle>
+                            <p className="text-sm text-muted-foreground">
+                                {equipment.typeName}
+                            </p>
+                        </div>
                     </div>
                 </SheetHeader>
 
-                <Separator className="mb-4" />
+                {/* Quick Stats Grid */}
+                <div className="grid grid-cols-2 gap-3 mb-6">
+                    <div className="rounded-xl border bg-card p-3 shadow-sm flex flex-col justify-center items-start">
+                        <span className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
+                            <Activity className="h-3.5 w-3.5" /> Current Status
+                        </span>
+                        <StatusBadge status={equipment.status} />
+                    </div>
+                    <div className="rounded-xl border bg-card p-3 shadow-sm flex flex-col justify-center">
+                        <span className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
+                            <Hash className="h-3.5 w-3.5" /> Asset ID
+                        </span>
+                        <span className="text-sm font-semibold font-mono tracking-tight">
+                            {equipment.id.toString().padStart(5, '0')}
+                        </span>
+                    </div>
+                </div>
 
                 {/* Health Score */}
-                <div className="mb-6 space-y-2">
-                    <div className="flex items-center justify-between">
-                        <p className="text-sm font-medium">Maintenance Health</p>
-                        <p className={cn("text-sm font-semibold", hConfig.colorClass)}>
+                <div className="mb-6 rounded-xl border bg-slate-50/50 dark:bg-slate-900/20 p-4 shadow-sm">
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                            <ShieldCheck className="h-4 w-4 text-muted-foreground" />
+                            <p className="text-sm font-semibold">Maintenance Health</p>
+                        </div>
+                        <p className={cn("text-xs font-bold uppercase tracking-wider", hConfig.colorClass)}>
                             {hConfig.label}
                         </p>
                     </div>
-                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted border">
+                    <div className="h-2 w-full overflow-hidden rounded-full bg-muted border mb-3">
                         <div
                             className={cn("h-full transition-all", hConfig.barClass, hConfig.width)}
                         />
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                        Last cleaned {days} day{days !== 1 ? "s" : ""} ago —{" "}
-                        {formatDate(equipment.lastCleanedDate)}
-                    </p>
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+                        <span>Last cleaned <strong>{days} day{days !== 1 ? "s" : ""} ago</strong> ({formatDate(equipment.lastCleanedDate)})</span>
+                    </div>
                 </div>
-
-                <Separator className="mb-4" />
 
                 {/* Tabs: History + Log Maintenance */}
                 <Tabs defaultValue="history">
                     <TabsList className="w-full rounded-full">
-                        <TabsTrigger value="history" className="flex-1 rounded-full">
-                            History ({logs.length})
+                        <TabsTrigger value="history" className="flex-1 rounded-full gap-2">
+                            <History className="h-3.5 w-3.5" /> History ({logs.length})
                         </TabsTrigger>
-                        <TabsTrigger value="log" className="flex-1 rounded-full">
-                            Log Maintenance
+                        <TabsTrigger value="log" className="flex-1 rounded-full gap-2">
+                            <PenLine className="h-3.5 w-3.5" /> Log Maintenance
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value="history" className="mt-4">

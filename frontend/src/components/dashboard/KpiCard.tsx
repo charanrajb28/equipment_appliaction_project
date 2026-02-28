@@ -23,23 +23,25 @@ export function KpiCard({
     return (
         <div
             className={cn(
-                "section-panel p-5 animate-fade-in opacity-0 transition-colors hover:bg-muted/30",
+                "section-panel p-6 md:p-8 animate-fade-in opacity-0 transition-colors hover:bg-muted/30",
                 delay,
                 className
             )}
         >
-            <div className="flex items-start justify-between mb-4">
+            <div className="flex items-start justify-between mb-6">
                 <p className="text-sm font-medium text-muted-foreground">
                     {title}
                 </p>
-                <Icon className="h-4 w-4 text-muted-foreground" />
+                <div className="p-2 bg-muted rounded-xl transition-all">
+                    <Icon className="h-5 w-5 text-muted-foreground" />
+                </div>
             </div>
             <div>
-                <p className="text-3xl font-semibold tracking-tight">
+                <p className="text-4xl font-semibold tracking-tight">
                     {value}
                 </p>
                 {description && (
-                    <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+                    <p className="mt-2 text-xs text-muted-foreground/80">{description}</p>
                 )}
             </div>
         </div>

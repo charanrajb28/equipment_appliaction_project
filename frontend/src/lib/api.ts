@@ -28,6 +28,9 @@ api.interceptors.response.use(
 export const getEquipment = (): Promise<Equipment[]> =>
     api.get("/api/equipment").then((r) => r.data);
 
+export const getEquipmentById = (id: number): Promise<Equipment> =>
+    api.get(`/api/equipment/${id}`).then((r) => r.data);
+
 export const createEquipment = (data: EquipmentRequest): Promise<Equipment> =>
     api.post("/api/equipment", data).then((r) => r.data);
 

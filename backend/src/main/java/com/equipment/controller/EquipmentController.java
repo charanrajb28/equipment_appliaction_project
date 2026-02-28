@@ -24,6 +24,12 @@ public class EquipmentController {
         return ResponseEntity.ok(equipmentService.getAll());
     }
 
+    /** GET /api/equipment/{id} — get a single equipment */
+    @GetMapping("/{id}")
+    public ResponseEntity<EquipmentDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(equipmentService.getById(id));
+    }
+
     /** POST /api/equipment — create new equipment */
     @PostMapping
     public ResponseEntity<EquipmentDTO> create(@Valid @RequestBody EquipmentRequest req) {

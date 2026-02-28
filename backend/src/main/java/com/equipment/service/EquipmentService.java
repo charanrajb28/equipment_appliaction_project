@@ -32,6 +32,12 @@ public class EquipmentService {
                 .toList();
     }
 
+    public EquipmentDTO getById(Long id) {
+        return equipmentRepository.findById(id)
+                .map(EquipmentDTO::from)
+                .orElseThrow(() -> new ResourceNotFoundException("Equipment not found with id: " + id));
+    }
+
     @Transactional
     public EquipmentDTO create(EquipmentRequest req) {
         validateRequest(req);

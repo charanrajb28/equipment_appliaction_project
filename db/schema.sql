@@ -84,7 +84,11 @@ BEGIN
     UPDATE equipment
     SET
         status            = 'Active',
-        last_cleaned_date = NEW.maintenance_date
+        last_cleaned_date = (
+            SELECT MAX(maintenance_date)
+            FROM maintenance_logs
+            WHERE equipment_id = NEW.equipment_id
+        )
     WHERE id = NEW.equipment_id;
     RETURN NEW;
 END;

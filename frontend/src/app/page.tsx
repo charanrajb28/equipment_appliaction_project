@@ -99,11 +99,11 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 md:space-y-12 pb-12">
       {/* ── Toolbar Header ── */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between pb-4 border-b">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">Pharma Equipment Overview</h1>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between pb-6 border-b">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-semibold tracking-tight">Pharma Equipment Overview</h1>
           <p className="text-sm text-muted-foreground">
             Monitor and manage critical pharmaceutical manufacturing and lab equipment.
           </p>
@@ -138,13 +138,13 @@ export default function DashboardPage() {
 
       {/* ── KPI Cards ── */}
       {loading ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-4">
           {[1, 2, 3, 4].map((i) => (
-            <Skeleton key={i} className="h-32 section-panel animate-pulse" />
+            <Skeleton key={i} className="h-40 section-panel animate-pulse" />
           ))}
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {kpiCards.map((card) => (
             <KpiCard key={card.title} {...card} />
           ))}
@@ -152,13 +152,13 @@ export default function DashboardPage() {
       )}
 
       {/* ── Main Layout Setup ── */}
-      <div className="grid gap-6 xl:grid-cols-3">
+      <div className="grid gap-6 lg:gap-8 xl:gap-10 xl:grid-cols-3">
         {/* Table taking 2/3 space */}
-        <div className="xl:col-span-2 section-panel opacity-0 animate-fade-in delay-150">
-          <div className="p-5 border-b bg-muted/20">
-            <h2 className="text-sm font-medium">Equipment Roster</h2>
+        <div className="xl:col-span-2 section-panel opacity-0 animate-fade-in delay-150 relative">
+          <div className="p-6 md:px-8 bg-muted/20 border-b border-border/40">
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Equipment Roster</h2>
           </div>
-          <div className="p-5 overflow-x-auto">
+          <div className="p-6 md:p-8 overflow-x-auto">
             <EquipmentTable
               equipment={equipment}
               types={types}
@@ -169,21 +169,23 @@ export default function DashboardPage() {
         </div>
 
         {/* Sidebar panels */}
-        <div className="space-y-6">
-          <div className="section-panel opacity-0 animate-fade-in delay-225">
-            <div className="p-4 border-b bg-muted/20">
-              <h2 className="text-sm font-medium">Health Status</h2>
+        <div className="space-y-6 lg:space-y-8">
+          <div className="section-panel opacity-0 animate-fade-in delay-225 relative">
+            <div className="p-6 bg-muted/20 border-b border-border/40">
+              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Health Status</h2>
             </div>
-            <div className="p-4">
+            <div className="p-6">
               <StatusChart equipment={equipment} />
             </div>
           </div>
 
-          <div className="section-panel opacity-0 animate-fade-in delay-300">
-            <div className="p-4 border-b bg-muted/20">
-              <h2 className="text-sm font-medium">Recent Logs</h2>
+          <div className="section-panel opacity-0 animate-fade-in delay-300 relative">
+            <div className="p-6 bg-muted/20 border-b border-border/40">
+              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Recent Logs</h2>
             </div>
-            <ActivityFeed logs={allLogs} equipment={equipment} />
+            <div className="p-6 max-h-[400px] overflow-y-auto">
+              <ActivityFeed logs={allLogs} equipment={equipment} />
+            </div>
           </div>
         </div>
       </div>
