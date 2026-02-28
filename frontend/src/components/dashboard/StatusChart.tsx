@@ -7,47 +7,54 @@ interface StatusChartProps {
     equipment: Equipment[];
 }
 
-// Semantic colors for clear status visibility
+import { getHealthScore } from "@/lib/dateUtils";
+
+// Semantic colors for clear health status visibility
 const STATUS_CONFIG = [
-    { key: "Active", color: "#10b981" }, // Emerald 500
-    { key: "Inactive", color: "#f43f5e" }, // Rose 500
-    { key: "Under Maintenance", color: "#f59e0b" }, // Amber 500
+    { key: "Excellent Health", color: "#059669", type: "health" }, // Emerald 600
+    { key: "Good Health", color: "#2563eb", type: "health" },      // Blue 600
+    { key: "Fair Health", color: "#d97706", type: "health" },      // Amber 600
+    { key: "Overdue Care", color: "#dc2626", type: "health" },     // Red 600
 ];
 
 export function StatusChart({ equipment }: StatusChartProps) {
-    const data = STATUS_CONFIG.map(({ key, color }) => ({
-        name: key,
-        value: equipment.filter((e) => e.status === key).length,
-        color,
-    })).filter((d) => d.value > 0);
+    const data = STATUS_CONFIG.map(({ key, color, type }) => {
+        const pureKey = key.replace(" Health", "").replace(" Care", "");
+        const count = equipment.filter((e) => getHealthScore(e.lastCleanedDate) === pureKey).length;
+
+        return {
+            name: key,
+            value: count,
+            color,
+            type
+        };
+    });
 
     const total = data.reduce((s, d) => s + d.value, 0);
-
-    if (data.length === 0) {
-        return (
-            <div className="flex h-40 items-center justify-center">
-                <p className="text-sm text-muted-foreground">No data available</p>
-            </div>
-        );
-    }
+    // filter for pie chart only items > 0 to avoid rendering issues with 0 values in Pie
+    const pieData = data.filter(d => d.value > 0);
 
     return (
         <div>
-            <ResponsiveContainer width="100%" height={160}>
+            <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
                     <Pie
-                        data={data}
+                        data={pieData.length > 0 ? pieData : [{ name: "No Data", value: 1, color: "#f3f4f6" }]}
                         cx="50%"
                         cy="50%"
-                        innerRadius={50}
-                        outerRadius={70}
+                        innerRadius={60}
+                        outerRadius={85}
                         paddingAngle={2}
                         dataKey="value"
                         strokeWidth={0}
                     >
-                        {data.map((entry) => (
-                            <Cell key={entry.name} fill={entry.color} />
-                        ))}
+                        {pieData.length > 0 ? (
+                            pieData.map((entry) => (
+                                <Cell key={entry.name} fill={entry.color} />
+                            ))
+                        ) : (
+                            <Cell key="empty" fill="#f3f4f6" />
+                        )}
                     </Pie>
                     <Tooltip
                         contentStyle={{
@@ -60,12 +67,12 @@ export function StatusChart({ equipment }: StatusChartProps) {
                 </PieChart>
             </ResponsiveContainer>
 
-            {/* Structured data table legend */}
+            {/* Structured data table legend - shows all even if 0 */}
             <div className="mt-4 border-t divide-y text-xs">
                 {data.map((d) => {
                     const pct = total > 0 ? Math.round((d.value / total) * 100) : 0;
                     return (
-                        <div key={d.name} className="flex justify-between items-center py-2">
+                        <div key={d.name} className="flex justify-between items-center py-1.5">
                             <span className="flex items-center gap-2 text-muted-foreground">
                                 <span
                                     className="inline-block h-2 w-2"

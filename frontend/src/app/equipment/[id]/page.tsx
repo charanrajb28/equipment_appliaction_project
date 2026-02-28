@@ -11,7 +11,9 @@ import {
     Hash,
     ShieldCheck,
     Clock,
+    Calendar,
 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 import { getEquipmentById, getMaintenanceLogs } from "@/lib/api";
 import type { Equipment, MaintenanceLog, HealthScore } from "@/lib/types";
@@ -63,6 +65,8 @@ export default function EquipmentDetailsPage({ params }: { params: Promise<{ id:
     const [logs, setLogs] = useState<MaintenanceLog[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [startDate, setStartDate] = useState<string>("");
+    const [endDate, setEndDate] = useState<string>("");
 
     const fetchDetails = useCallback(async () => {
         try {
@@ -117,6 +121,12 @@ export default function EquipmentDetailsPage({ params }: { params: Promise<{ id:
     const health = getHealthScore(equipment.lastCleanedDate);
     const hConfig = healthConfig[health];
     const days = daysSinceDate(equipment.lastCleanedDate);
+
+    const filteredLogs = logs.filter(log => {
+        if (startDate && new Date(log.maintenanceDate) < new Date(startDate)) return false;
+        if (endDate && new Date(log.maintenanceDate) > new Date(endDate)) return false;
+        return true;
+    });
 
     return (
         <div className="space-y-8 max-w-[90rem] mx-auto px-4 md:px-8 py-8 pb-16">
@@ -209,21 +219,44 @@ export default function EquipmentDetailsPage({ params }: { params: Promise<{ id:
 
                 {/* Maintenance Timeline */}
                 <div className="section-panel p-6 md:p-10 shadow-sm bg-indigo-50/30 dark:bg-indigo-950/10 border-indigo-100/60 dark:border-indigo-900/30">
-                    <div className="flex items-center justify-between mb-8 border-b border-indigo-100 dark:border-indigo-900/30 pb-5">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-indigo-100 dark:border-indigo-900/30 pb-5">
                         <div className="flex items-center gap-3">
                             <div className="p-2.5 bg-indigo-100/50 dark:bg-indigo-900/40 rounded-xl text-indigo-700 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-800/50">
                                 <History className="h-5 w-5" />
                             </div>
                             <div>
                                 <h3 className="text-lg font-semibold text-foreground tracking-tight">Service History</h3>
-                                <p className="text-xs text-muted-foreground mt-0.5 whitespace-nowrap">Tracking {logs.length} past record{logs.length !== 1 ? "s" : ""}</p>
+                                <p className="text-xs text-muted-foreground mt-0.5 whitespace-nowrap">Tracking {filteredLogs.length} past record{filteredLogs.length !== 1 ? "s" : ""}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2 self-start sm:self-auto">
+                            <div className="relative">
+                                <Calendar className="absolute left-2.5 top-2 h-3.5 w-3.5 text-muted-foreground" />
+                                <Input
+                                    className="pl-8 h-8 text-xs bg-background/50"
+                                    type="date"
+                                    value={startDate}
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                    title="Start Date"
+                                />
+                            </div>
+                            <span className="text-muted-foreground text-xs">-</span>
+                            <div className="relative">
+                                <Calendar className="absolute left-2.5 top-2 h-3.5 w-3.5 text-muted-foreground" />
+                                <Input
+                                    className="pl-8 h-8 text-xs bg-background/50"
+                                    type="date"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    title="End Date"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div className="pr-2">
-                        {logs.length > 0 ? (
-                            <MaintenanceTimeline logs={logs} />
+                        {filteredLogs.length > 0 ? (
+                            <MaintenanceTimeline logs={filteredLogs} />
                         ) : (
                             <div className="flex flex-col items-center justify-center py-16 text-muted-foreground bg-muted/30 border border-dashed rounded-xl">
                                 <Activity children={undefined} />

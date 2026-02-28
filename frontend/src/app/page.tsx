@@ -13,10 +13,10 @@ import type { Equipment, EquipmentType, MaintenanceLog } from "@/lib/types";
 import { getEquipment, getEquipmentTypes, getMaintenanceLogs } from "@/lib/api";
 import { isOverdue } from "@/lib/dateUtils";
 
+import { OverdueAlert } from "@/components/dashboard/OverdueAlert";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { StatusChart } from "@/components/dashboard/StatusChart";
-import { OverdueAlert } from "@/components/dashboard/OverdueAlert";
-import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
+import { GlobalLogsTable } from "@/components/dashboard/GlobalLogsTable";
 import { EquipmentTable } from "@/components/equipment/EquipmentTable";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -47,7 +47,7 @@ export default function DashboardPage() {
       );
       const logs = logResults.flatMap((r) =>
         r.status === "fulfilled" ? r.value : []
-      );
+      ).sort((a, b) => new Date(b.maintenanceDate).getTime() - new Date(a.maintenanceDate).getTime());
       setAllLogs(logs);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load data");
@@ -179,14 +179,16 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="section-panel opacity-0 animate-fade-in delay-300 relative bg-indigo-50/20 dark:bg-indigo-950/10 border-indigo-100/60 dark:border-indigo-900/30">
-            <div className="p-6 bg-indigo-100/30 dark:bg-indigo-900/20 border-b border-indigo-100 dark:border-indigo-900/30">
-              <h2 className="text-sm font-semibold text-indigo-700/80 dark:text-indigo-400/80 uppercase tracking-wider">Recent Logs</h2>
-            </div>
-            <div className="p-6 max-h-[400px] overflow-y-auto">
-              <ActivityFeed logs={allLogs} equipment={equipment} />
-            </div>
-          </div>
+        </div>
+      </div>
+
+      {/* ── Global Maintenance Logs ── */}
+      <div className="section-panel opacity-0 animate-fade-in delay-500 relative bg-amber-50/20 dark:bg-amber-950/10 border-amber-100/60 dark:border-amber-900/30 overflow-hidden">
+        <div className="p-6 md:px-8 bg-amber-100/30 dark:bg-amber-900/20 border-b border-amber-100 dark:border-amber-900/30">
+          <h2 className="text-sm font-semibold text-amber-700/80 dark:text-amber-400/80 uppercase tracking-wider">Maintenance Records Directory</h2>
+        </div>
+        <div className="p-6 md:p-8">
+          <GlobalLogsTable logs={allLogs} equipment={equipment} types={types} />
         </div>
       </div>
     </div>
