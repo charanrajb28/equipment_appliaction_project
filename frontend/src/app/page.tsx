@@ -1,65 +1,162 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useEffect, useState, useCallback } from "react";
+import {
+  Package,
+  CheckCircle2,
+  Wrench,
+  AlertTriangle,
+} from "lucide-react";
+
+import type { Equipment, EquipmentType, MaintenanceLog } from "@/lib/types";
+import { getEquipment, getEquipmentTypes, getMaintenanceLogs } from "@/lib/api";
+import { isOverdue } from "@/lib/dateUtils";
+
+import { KpiCard } from "@/components/dashboard/KpiCard";
+import { StatusChart } from "@/components/dashboard/StatusChart";
+import { OverdueAlert } from "@/components/dashboard/OverdueAlert";
+import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
+import { EquipmentTable } from "@/components/equipment/EquipmentTable";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
+
+export default function DashboardPage() {
+  const [equipment, setEquipment] = useState<Equipment[]>([]);
+  const [types, setTypes] = useState<EquipmentType[]>([]);
+  const [allLogs, setAllLogs] = useState<MaintenanceLog[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchAll = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [equipList, typeList] = await Promise.all([
+        getEquipment(),
+        getEquipmentTypes(),
+      ]);
+      setEquipment(equipList);
+      setTypes(typeList);
+
+      // Fetch maintenance logs for all equipment in parallel
+      const logResults = await Promise.allSettled(
+        equipList.map((e) => getMaintenanceLogs(e.id))
+      );
+      const logs = logResults.flatMap((r) =>
+        r.status === "fulfilled" ? r.value : []
+      );
+      setAllLogs(logs);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to load data"
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAll();
+  }, [fetchAll]);
+
+  // KPI derived values
+  const totalCount = equipment.length;
+  const activeCount = equipment.filter((e) => e.status === "Active").length;
+  const maintenanceCount = equipment.filter(
+    (e) => e.status === "Under Maintenance"
+  ).length;
+  const overdueCount = equipment.filter((e) => isOverdue(e.lastCleanedDate)).length;
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="space-y-8">
+      {/* Page header */}
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+        <p className="text-sm text-muted-foreground">
+          Overview of your equipment fleet and maintenance health
+        </p>
+      </div>
+
+      {/* Error state */}
+      {error && (
+        <div className="rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3">
+          <p className="text-sm text-destructive">
+            Could not connect to backend: {error}. Make sure your Spring Boot server is running on{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-xs">
+              {process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080"}
+            </code>
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      )}
+
+      {/* Overdue alert */}
+      {!loading && equipment.length > 0 && (
+        <OverdueAlert equipment={equipment} />
+      )}
+
+      {/* KPI Cards */}
+      {loading ? (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="h-28 rounded-lg" />
+          ))}
         </div>
-      </main>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <KpiCard
+            title="Total Equipment"
+            value={totalCount}
+            icon={Package}
+            colorClass="text-sky-600 dark:text-sky-400"
+            bgClass="bg-sky-100 dark:bg-sky-950/40"
+            description="All registered items"
+          />
+          <KpiCard
+            title="Active"
+            value={activeCount}
+            icon={CheckCircle2}
+            colorClass="text-emerald-600 dark:text-emerald-400"
+            bgClass="bg-emerald-100 dark:bg-emerald-950/40"
+            description="Currently operational"
+          />
+          <KpiCard
+            title="Under Maintenance"
+            value={maintenanceCount}
+            icon={Wrench}
+            colorClass="text-amber-600 dark:text-amber-400"
+            bgClass="bg-amber-100 dark:bg-amber-950/40"
+            description="Being serviced"
+          />
+          <KpiCard
+            title="Overdue"
+            value={overdueCount}
+            icon={AlertTriangle}
+            colorClass="text-red-600 dark:text-red-400"
+            bgClass="bg-red-100 dark:bg-red-950/40"
+            description="Last cleaned >30 days"
+          />
+        </div>
+      )}
+
+      <Separator />
+
+      {/* Main content: table + sidebar */}
+      <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
+        <div>
+          <EquipmentTable
+            equipment={equipment}
+            types={types}
+            loading={loading}
+            onRefresh={fetchAll}
+          />
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-4">
+          <StatusChart equipment={equipment} />
+          <ActivityFeed logs={allLogs} equipment={equipment} />
+        </div>
+      </div>
     </div>
   );
 }
