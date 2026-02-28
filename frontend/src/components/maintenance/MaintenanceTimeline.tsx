@@ -29,17 +29,17 @@ export function MaintenanceTimeline({ logs }: MaintenanceTimelineProps) {
             {sorted.map((log) => (
                 <li key={log.id} className="relative pb-6">
                     {/* Timeline dot */}
-                    <span className="absolute -left-[1.35rem] flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 ring-4 ring-background">
-                        <Wrench className="h-3 w-3 text-primary" />
+                    <span className="absolute -left-[1.35rem] flex h-6 w-6 items-center justify-center rounded-sm bg-muted border">
+                        <Wrench className="h-3 w-3 text-muted-foreground" />
                     </span>
 
                     <div className="ml-2 rounded-lg border bg-card p-3 shadow-sm">
                         <div className="mb-1 flex items-center justify-between gap-2">
-                            <span className="text-xs font-semibold text-primary">
+                            <span className="text-xs font-mono font-medium text-muted-foreground">
                                 {formatDate(log.maintenanceDate)}
                             </span>
-                            <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400">
-                                Completed
+                            <span className="inline-flex items-center border bg-muted px-1.5 py-0.5 text-[10px] font-mono font-medium text-muted-foreground uppercase">
+                                Logged
                             </span>
                         </div>
                         <p className="text-sm font-medium text-foreground">

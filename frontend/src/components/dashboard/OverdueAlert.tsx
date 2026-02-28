@@ -3,7 +3,7 @@
 import { AlertTriangle, X } from "lucide-react";
 import { useState } from "react";
 import type { Equipment } from "@/lib/types";
-import { isOverdue } from "@/lib/dateUtils";
+import { isOverdue, daysSinceDate } from "@/lib/dateUtils";
 
 interface OverdueAlertProps {
     equipment: Equipment[];
@@ -16,24 +16,38 @@ export function OverdueAlert({ equipment }: OverdueAlertProps) {
     if (dismissed || overdue.length === 0) return null;
 
     return (
-        <div className="relative flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-800 dark:border-amber-800/40 dark:bg-amber-950/20 dark:text-amber-400">
-            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
-            <div className="flex-1 space-y-1">
-                <p className="text-sm font-semibold">
-                    {overdue.length} equipment item{overdue.length > 1 ? "s" : ""} overdue for cleaning
-                </p>
-                <p className="text-xs">
-                    {overdue.map((e) => e.name).join(", ")} — last cleaned more than 30 days ago.
-                    These cannot be set to Active status until maintenance is logged.
-                </p>
+        <div className="section-panel bg-red-50/50 border-red-200 border-l-[3px] border-l-red-500 rounded-none p-3 shadow-none">
+            <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                    <AlertTriangle className="h-4 w-4 text-red-600 shrink-0" />
+                    <p className="text-sm font-medium text-red-900">
+                        {overdue.length} asset{overdue.length > 1 ? "s" : ""} required scheduled maintenance over 30 days ago.
+                    </p>
+                </div>
+
+                <div className="flex items-center gap-4">
+                    <div className="hidden sm:flex items-center gap-2">
+                        {overdue.slice(0, 2).map((e) => (
+                            <span
+                                key={e.id}
+                                className="inline-flex items-center gap-1 bg-white border border-red-100 px-2 py-0.5 text-xs font-mono text-red-700"
+                            >
+                                {e.name}
+                                <span className="text-red-400">/{daysSinceDate(e.lastCleanedDate)}d</span>
+                            </span>
+                        ))}
+                        {overdue.length > 2 && (
+                            <span className="text-xs text-red-600 font-mono">+{overdue.length - 2} more</span>
+                        )}
+                    </div>
+                    <button
+                        onClick={() => setDismissed(true)}
+                        className="text-red-600/70 hover:text-red-900 transition-colors"
+                    >
+                        <X className="h-4 w-4" />
+                    </button>
+                </div>
             </div>
-            <button
-                onClick={() => setDismissed(true)}
-                className="ml-auto shrink-0 rounded p-0.5 hover:bg-amber-100 dark:hover:bg-amber-900/40"
-                aria-label="Dismiss alert"
-            >
-                <X className="h-4 w-4" />
-            </button>
         </div>
     );
 }

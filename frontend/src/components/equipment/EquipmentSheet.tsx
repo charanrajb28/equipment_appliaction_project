@@ -111,9 +111,9 @@ export function EquipmentSheet({
                             {hConfig.label}
                         </p>
                     </div>
-                    <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+                    <div className="h-1.5 w-full overflow-hidden rounded-sm bg-muted border">
                         <div
-                            className={cn("h-full rounded-full transition-all", hConfig.barClass, hConfig.width)}
+                            className={cn("h-full transition-all", hConfig.barClass, hConfig.width)}
                         />
                     </div>
                     <p className="text-xs text-muted-foreground">
