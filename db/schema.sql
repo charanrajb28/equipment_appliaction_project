@@ -6,7 +6,7 @@
 -- 1. Equipment Types (dynamic — no hardcoded values in code)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS equipment_types (
-    id   SERIAL PRIMARY KEY,
+    id   BIGSERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE
 );
 
@@ -26,9 +26,9 @@ ON CONFLICT (name) DO NOTHING;
 -- 2. Equipment
 -- ============================================================
 CREATE TABLE IF NOT EXISTS equipment (
-    id                SERIAL PRIMARY KEY,
+    id                BIGSERIAL PRIMARY KEY,
     name              VARCHAR(200) NOT NULL,
-    type_id           INT          NOT NULL REFERENCES equipment_types(id) ON DELETE RESTRICT,
+    type_id           BIGINT       NOT NULL REFERENCES equipment_types(id) ON DELETE RESTRICT,
     status            VARCHAR(30)  NOT NULL
                           CHECK (status IN ('Active', 'Inactive', 'Under Maintenance')),
     last_cleaned_date DATE         NOT NULL,
@@ -43,8 +43,8 @@ CREATE INDEX IF NOT EXISTS idx_equipment_type   ON equipment(type_id);
 -- 3. Maintenance Logs
 -- ============================================================
 CREATE TABLE IF NOT EXISTS maintenance_logs (
-    id               SERIAL PRIMARY KEY,
-    equipment_id     INT          NOT NULL REFERENCES equipment(id) ON DELETE CASCADE,
+    id               BIGSERIAL PRIMARY KEY,
+    equipment_id     BIGINT       NOT NULL REFERENCES equipment(id) ON DELETE CASCADE,
     maintenance_date DATE         NOT NULL,
     notes            TEXT,
     performed_by     VARCHAR(200) NOT NULL,
