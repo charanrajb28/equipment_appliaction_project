@@ -111,7 +111,7 @@ export function EquipmentSheet({
                             {hConfig.label}
                         </p>
                     </div>
-                    <div className="h-1.5 w-full overflow-hidden rounded-sm bg-muted border">
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted border">
                         <div
                             className={cn("h-full transition-all", hConfig.barClass, hConfig.width)}
                         />
@@ -126,11 +126,11 @@ export function EquipmentSheet({
 
                 {/* Tabs: History + Log Maintenance */}
                 <Tabs defaultValue="history">
-                    <TabsList className="w-full">
-                        <TabsTrigger value="history" className="flex-1">
+                    <TabsList className="w-full rounded-full">
+                        <TabsTrigger value="history" className="flex-1 rounded-full">
                             History ({logs.length})
                         </TabsTrigger>
-                        <TabsTrigger value="log" className="flex-1">
+                        <TabsTrigger value="log" className="flex-1 rounded-full">
                             Log Maintenance
                         </TabsTrigger>
                     </TabsList>

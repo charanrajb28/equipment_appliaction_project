@@ -68,7 +68,7 @@ export default function DashboardPage() {
 
   const kpiCards = [
     {
-      title: "Total Assets",
+      title: "Lab & Mfg Assets",
       value: totalCount,
       icon: Layers,
       description: "Across all categories",
@@ -103,9 +103,9 @@ export default function DashboardPage() {
       {/* ── Toolbar Header ── */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between pb-4 border-b">
         <div className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">Overview</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Pharma Equipment Overview</h1>
           <p className="text-sm text-muted-foreground">
-            Monitor and manage equipment across all facilities.
+            Monitor and manage critical pharmaceutical manufacturing and lab equipment.
           </p>
         </div>
         <Button

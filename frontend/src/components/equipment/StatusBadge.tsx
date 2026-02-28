@@ -36,14 +36,14 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
         <Badge
             variant="outline"
             className={cn(
-                "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-sm font-medium shadow-none text-xs",
+                "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-medium shadow-none text-xs",
                 config.badgeClass,
                 className
             )}
         >
             <span
                 className={cn(
-                    "inline-flex h-1.5 w-1.5 rounded-sm",
+                    "inline-flex h-1.5 w-1.5 rounded-full",
                     config.dotClass
                 )}
             />

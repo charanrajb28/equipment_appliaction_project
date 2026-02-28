@@ -1,6 +1,6 @@
 "use client";
 
-import { Box } from "lucide-react";
+import { FlaskConical } from "lucide-react";
 
 export function Navbar() {
     return (
@@ -8,11 +8,11 @@ export function Navbar() {
             <div className="mx-auto flex h-14 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center gap-2">
                     <div className="flex bg-foreground text-background h-7 w-7 items-center justify-center rounded-sm">
-                        <Box className="h-4 w-4" />
+                        <FlaskConical className="h-4 w-4" />
                     </div>
                     <div>
                         <p className="text-sm font-semibold leading-tight tracking-tight">
-                            EquipTrack
+                            BioTrack
                         </p>
                     </div>
                 </div>

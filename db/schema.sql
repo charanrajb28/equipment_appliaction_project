@@ -12,14 +12,14 @@ CREATE TABLE IF NOT EXISTS equipment_types (
 
 -- Seed types (modifiable via DB/admin without code changes)
 INSERT INTO equipment_types (name) VALUES
-  ('HVAC'),
-  ('Generator'),
-  ('Compressor'),
-  ('Conveyor Belt'),
-  ('Pump'),
-  ('Electrical Panel'),
-  ('Boiler'),
-  ('Chiller')
+  ('Bioreactor'),
+  ('Centrifuge'),
+  ('Autoclave'),
+  ('Chromatography System'),
+  ('Spectrophotometer'),
+  ('Lyophilizer'),
+  ('Incubator'),
+  ('Cleanroom HVAC')
 ON CONFLICT (name) DO NOTHING;
 
 

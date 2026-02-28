@@ -168,7 +168,7 @@ export function EquipmentTable({
             {/* Header */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h2 className="text-lg font-semibold">Equipment Registry</h2>
+                    <h2 className="text-lg font-semibold">Pharma Asset Registry</h2>
                     <p className="text-sm text-muted-foreground">
                         {filtered.length} item{filtered.length !== 1 ? "s" : ""}
                         {search || statusFilter !== "All" || typeFilter !== "All"
@@ -196,9 +196,9 @@ export function EquipmentTable({
                     setPage(1);
                 }}
             >
-                <TabsList>
+                <TabsList className="rounded-full">
                     {statusTabs.map((s) => (
-                        <TabsTrigger key={s} value={s}>
+                        <TabsTrigger key={s} value={s} className="rounded-full">
                             {s}
                             <span className="ml-1.5 rounded-full bg-muted px-1.5 py-0.5 text-xs font-medium">
                                 {s === "All"

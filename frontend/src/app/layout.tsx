@@ -7,9 +7,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "EquipTrack — Equipment Management System",
+  title: "BioTrack — Pharmaceutical Equipment Management System",
   description:
-    "Manage equipment, track maintenance history, and monitor asset health with EquipTrack.",
+    "Manage critical pharmaceutical assets, track maintenance history, and monitor equipment health with BioTrack.",
 };
 
 export default function RootLayout({
@@ -28,8 +28,8 @@ export default function RootLayout({
           <footer className="mt-16 border-t bg-muted/30">
             <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
               <p className="text-center text-xs text-muted-foreground">
-                <span className="gradient-text font-semibold">EquipTrack</span>
-                {" "}— Equipment Management System · Built with Spring Boot & Next.js
+                <span className="font-semibold text-foreground">BioTrack</span>
+                {" "}— Pharmaceutical Equipment Management · Built with Spring Boot & Next.js
               </p>
             </div>
           </footer>

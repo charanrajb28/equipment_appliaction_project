@@ -109,7 +109,7 @@ export function EquipmentForm({
                         <FormItem>
                             <FormLabel>Equipment Name</FormLabel>
                             <FormControl>
-                                <Input placeholder="e.g. HVAC Unit 3A" {...field} />
+                                <Input placeholder="e.g. BioFlo 120 Bioreactor" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

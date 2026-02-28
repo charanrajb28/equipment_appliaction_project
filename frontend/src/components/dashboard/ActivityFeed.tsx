@@ -36,7 +36,7 @@ export function ActivityFeed({ logs, equipment }: ActivityFeedProps) {
                         className="flex items-start gap-4 p-4 hover:bg-muted/30 transition-colors"
                     >
                         {/* Minimal avatar */}
-                        <div className="flex h-7 w-7 mt-0.5 shrink-0 items-center justify-center rounded-sm bg-muted border text-xs font-semibold">
+                        <div className="flex h-7 w-7 mt-0.5 shrink-0 items-center justify-center rounded-full bg-muted border text-xs font-semibold">
                             {log.performedBy.slice(0, 1).toUpperCase()}
                         </div>
 

@@ -46,7 +46,7 @@
 
 :root {
   /* Crisp, minimal borders and high-contrast professional neutral palette */
-  --radius: 0.15rem;
+  --radius: 0.5rem;
   /* Reduced radius for sharper, technical look */
   --background: oklch(0.985 0 0);
   /* very light zinc */
