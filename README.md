@@ -1,151 +1,121 @@
-# EquipTrack — Equipment Management System
+# 🧪 PharmaTrack: Professional Equipment Lifecycle Manager
 
-A full-stack web application for managing equipment and maintenance lifecycle.
-
-**Stack:** Next.js 16 (frontend) · Spring Boot 3.4 / Java 21 (backend) · PostgreSQL 16 (database)
+PharmaTrack is a premium, enterprise-grade Equipment Management System (EMS) designed for pharmaceutical manufacturing and laboratory environments. It provides full-lifecycle tracking of critical assets, from procurement to decommissioning, with a heavy focus on **GMP (Good Manufacturing Practice) Compliance**.
 
 ---
 
-## Project Structure
+## 🏗️ Architecture & Technology Stack
 
-```
-equipment_appliaction_project/
-├── backend/      Spring Boot REST API
-├── frontend/     Next.js 16 web application
-├── db/
-│   └── schema.sql  PostgreSQL schema + triggers + seed data
-├── README.md
-└── COMPLIANCE.md
-```
+The project follows a modern, decoupled architecture ensuring high performance, scalability, and strict type safety across the entire stack.
+
+### 🌐 Frontend (Next.js Application)
+- **Framework**: [Next.js 15+](https://nextjs.org/) (App Router)
+- **Language**: TypeScript (Strict Mode)
+- **Styling**: Tailwind CSS 4.0 (Modern utility-first CSS)
+- **UI Components**: shadcn/ui (Radix UI Primitives)
+- **Visualizations**: Recharts (Dynamic SVG charting)
+- **Icons**: Lucide React (Premium stroke icons)
+- **Date Handling**: date-fns (Robust ISO-8601 formatting)
+- **Form Management**: React Hook Form + Zod (Schema-based validation)
+- **State Management**: React Hooks (useCallback, useMemo, useEffect)
+
+### ⚙️ Backend (Spring Boot REST API)
+- **Framework**: [Spring Boot 3.4.x](https://spring.io/projects/spring-boot)
+- **Language**: Java 17
+- **Database Access**: Spring Data JPA (Hibernate)
+- **Security**: CORS-enabled for secure cross-origin resource sharing
+- **Validation**: Jakarta Bean Validation
+- **Efficiency**: Project Lombok for clean, boilerplate-free code
+- **Persistence**: PostgreSQL 16+
 
 ---
 
-## Prerequisites
+## 🚀 Getting Started
 
-| Tool | Version |
-|---|---|
-| Node.js | 18+ |
-| Java | 21 |
-| Maven | 3.9+ |
-| PostgreSQL | 14+ |
+### 1. Database Provisioning
+PharmaTrack uses PostgreSQL for relational data and low-level business logic (triggers).
 
----
-
-## Database Setup
-
-1. Start PostgreSQL and create the database:
 ```sql
-CREATE DATABASE equipment_db;
+-- Create the database
+CREATE DATABASE pharma_track_db;
+
+-- Initialize schema and seed data (Equipment Types & Initial Assets)
+-- Run the following command from the project root:
+-- psql -U your_user -d pharma_track_db -f db/schema.sql
 ```
 
-2. Run the schema (from the project root):
-```bash
-psql -U postgres -d equipment_db -f db/schema.sql
-```
+### 2. Backend Initialization
+1. Navigate to `/backend`.
+2. Configure your credentials in `src/main/resources/application.properties`.
+3. Build and package the application:
+   ```bash
+   ./mvnw clean package
+   ```
+4. Execute the JAR:
+   ```bash
+   java -jar target/equipment-management-0.0.1-SNAPSHOT.jar
+   ```
+   *The API server starts at `http://localhost:8080`.*
 
-This creates all tables, indexes, triggers, and seeds 8 equipment types.
+### 3. Frontend Initialization
+1. Navigate to `/frontend`.
+2. Install the enterprise dependency tree:
+   ```bash
+   npm install
+   ```
+3. Configure the environment:
+   `NEXT_PUBLIC_API_URL=http://localhost:8080`
+4. Launch the development experience:
+   ```bash
+   npm run dev
+   ```
+   *Access the dashboard at `http://localhost:3000`.*
 
 ---
 
-## Backend Setup & Run
+## 💎 Advanced Features & UX
 
-1. Update credentials in `backend/src/main/resources/application.properties` if different from defaults:
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/equipment_db
-spring.datasource.username=postgres
-spring.datasource.password=postgres
-```
+### 📊 Intelligent Data Visualization
+- **Health Score Algorithm**: Assets are dynamically graded (Excellent, Good, Fair, Overdue) based on their maintenance history and compliance deadlines.
+- **Dynamic Pie Chart**: Real-time breakdown of factory health. Even 0% states remain visible in the legend for full audit transparency.
+- **KPI Metrics**: Instant count of Live Assets, Active Units, and Critical Overdue items.
 
-2. Build and run:
-```bash
-cd backend
-mvn spring-boot:run
-```
+### � Search & Directory Engine
+- **Global Logs Directory**: A dedicated audit-ready table for all maintenance history across the entire site.
+- **Multi-Factor Filtering**: Filter logs by Equipment Category, Start Date, or End Date.
+- **Dynamic Sorting**: Logs are automatically sorted chronologically (Newest First) to ensure the most recent interventions are always visible.
 
-The API will be available at `http://localhost:8080`
-
----
-
-## Frontend Setup & Run
-
-1. Install dependencies:
-```bash
-cd frontend
-npm install
-```
-
-2. Create `.env.local` (already included):
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8080
-```
-
-3. Start the dev server:
-```bash
-npm run dev
-```
-
-The app will be at `http://localhost:3000`
+### 🛠️ Maintenance Lifecycle
+- **Unified Hero Card**: A premium high-density display of asset metadata, including Asset IDs, Type Tags, and Service Recency.
+- **Compliance Guardrails**: The system prevents marking equipment as "Active" if it has missed its 30-day sanitation window.
+- **Audit-Ready Logs**: Every maintenance action is captured with performer details, timestamps, and technician notes.
 
 ---
 
-## REST API Reference
+## 📦 Full Dependency List
 
-### Equipment
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/equipment` | List all equipment |
-| POST | `/api/equipment` | Create equipment |
-| PUT | `/api/equipment/{id}` | Update equipment |
-| DELETE | `/api/equipment/{id}` | Delete equipment |
+### Frontend (npm)
+| Package | Purpose |
+| :--- | :--- |
+| `next` | Core Framework |
+| `react/react-dom` | UI Library |
+| `recharts` | Data Visualization |
+| `date-fns` | Compliance-accurate date logic |
+| `zod` | Runtime type validation |
+| `lucide-react` | Professional Iconography |
+| `axios` | Backend communication |
+| `tailwindcss` | Design System |
 
-### Maintenance
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/maintenance` | Log a maintenance event |
-| GET | `/api/equipment/{id}/maintenance` | Get maintenance history |
-
-### Types
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/equipment-types` | List all equipment types |
-
----
-
-## Additional Libraries Used
-
-### Frontend
-```bash
-npm install axios date-fns recharts lucide-react react-hook-form @hookform/resolvers zod
-npx shadcn@latest init
-npx shadcn@latest add button input label select badge table dialog sheet form textarea skeleton separator card tabs tooltip popover calendar
-```
-
-### Backend
-All via `pom.xml` (Maven):
-- `spring-boot-starter-web`
-- `spring-boot-starter-data-jpa`
-- `spring-boot-starter-validation`
-- `postgresql` (JDBC driver)
-- `lombok`
+### Backend (Maven)
+| Artifact | Purpose |
+| :--- | :--- |
+| `spring-boot-starter-web` | API REST Layer |
+| `spring-boot-starter-data-jpa` | Database ORM |
+| `spring-boot-starter-validation` | Input Sanitization |
+| `postgresql` | Database Driver |
+| `lombok` | Code Cleanliness |
 
 ---
 
-## Key Features
-
-- Equipment CRUD with full validation
-- Dynamic equipment types (seeded from DB, no hardcoded values)
-- Maintenance logging with automatic status + date sync (via PostgreSQL trigger)
-- 30-day Active status constraint (enforced in both service layer and DB trigger)
-- Dashboard with KPI cards, status chart, overdue alerts, activity feed
-- Equipment health score (Excellent / Good / Fair / Overdue)
-- Search, filter by status/type, sortable columns, pagination
-- No inline styles · No raw HTML form elements · Fully compliant
-
----
-
-## Assumptions
-
-- PostgreSQL runs locally on port 5432 with user `postgres` and password `postgres`
-- Spring Boot runs on port 8080; Next.js on port 3000
-- Equipment types are managed directly in the `equipment_types` table (no UI required per spec)
-- The 30-day rule is calculated based on `last_cleaned_date` vs the current server date
+## 🔒 Governance & Support
+This documentation is maintained as part of the system's technical governance. For operational support or regulatory inquiries, refer to the `COMPLIANCE.md` file located in the root repository.
