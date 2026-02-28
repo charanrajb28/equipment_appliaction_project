@@ -152,11 +152,11 @@ export default function DashboardPage() {
       )}
 
       {/* ── Main Layout Setup ── */}
-      <div className="grid gap-6 lg:gap-8 xl:gap-10 xl:grid-cols-3">
+      <div className="grid gap-6 lg:gap-8 xl:gap-10 xl:grid-cols-3 items-start">
         {/* Table taking 2/3 space */}
-        <div className="xl:col-span-2 section-panel opacity-0 animate-fade-in delay-150 relative">
-          <div className="p-6 md:px-8 bg-muted/20 border-b border-border/40">
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Equipment Roster</h2>
+        <div className="xl:col-span-2 section-panel opacity-0 animate-fade-in delay-150 relative bg-slate-50/30 dark:bg-slate-950/10 border-slate-100 dark:border-slate-800/60">
+          <div className="p-6 md:px-8 bg-slate-100/50 dark:bg-slate-900/40 border-b border-slate-200/60 dark:border-slate-800">
+            <h2 className="text-sm font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Equipment Roster</h2>
           </div>
           <div className="p-6 md:p-8 overflow-x-auto">
             <EquipmentTable
@@ -170,18 +170,18 @@ export default function DashboardPage() {
 
         {/* Sidebar panels */}
         <div className="space-y-6 lg:space-y-8">
-          <div className="section-panel opacity-0 animate-fade-in delay-225 relative">
-            <div className="p-6 bg-muted/20 border-b border-border/40">
-              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Health Status</h2>
+          <div className="section-panel opacity-0 animate-fade-in delay-225 relative bg-emerald-50/20 dark:bg-emerald-950/10 border-emerald-100/60 dark:border-emerald-900/30">
+            <div className="p-6 bg-emerald-100/30 dark:bg-emerald-900/20 border-b border-emerald-100 dark:border-emerald-900/30">
+              <h2 className="text-sm font-semibold text-emerald-700/80 dark:text-emerald-400/80 uppercase tracking-wider">Health Status</h2>
             </div>
             <div className="p-6">
               <StatusChart equipment={equipment} />
             </div>
           </div>
 
-          <div className="section-panel opacity-0 animate-fade-in delay-300 relative">
-            <div className="p-6 bg-muted/20 border-b border-border/40">
-              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Recent Logs</h2>
+          <div className="section-panel opacity-0 animate-fade-in delay-300 relative bg-indigo-50/20 dark:bg-indigo-950/10 border-indigo-100/60 dark:border-indigo-900/30">
+            <div className="p-6 bg-indigo-100/30 dark:bg-indigo-900/20 border-b border-indigo-100 dark:border-indigo-900/30">
+              <h2 className="text-sm font-semibold text-indigo-700/80 dark:text-indigo-400/80 uppercase tracking-wider">Recent Logs</h2>
             </div>
             <div className="p-6 max-h-[400px] overflow-y-auto">
               <ActivityFeed logs={allLogs} equipment={equipment} />

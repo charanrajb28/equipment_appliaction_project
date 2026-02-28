@@ -128,88 +128,70 @@ export default function EquipmentDetailsPage({ params }: { params: Promise<{ id:
                 </Link>
             </Button>
 
-            {/* Unified Hero Card */}
-            <div className="section-panel overflow-hidden mb-6">
-                <div className="p-8 md:p-10 border-b bg-muted/10">
-                    <div className="flex flex-col md:flex-row gap-6 md:items-center justify-between">
-                        <div>
-                            <h1 className="text-4xl font-semibold tracking-tight mb-2">{equipment.name}</h1>
-                            <p className="text-muted-foreground font-medium text-base flex items-center gap-2">
-                                {equipment.typeName}
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <StatusBadge status={equipment.status} />
-                        </div>
-                    </div>
+            {/* Unified Premium Hero Card */}
+            <div className="section-panel p-8 md:p-10 mb-8 relative overflow-hidden bg-slate-50/50 dark:bg-slate-900/20 border-slate-100 dark:border-slate-800/60">
+                {/* Background Decoration */}
+                <div className="absolute top-0 right-0 -mr-20 -mt-20 opacity-5 pointer-events-none">
+                    <ShieldCheck className="w-96 h-96" />
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x border-t-0 p-6 md:p-8 bg-card/50">
-                    {/* Asset ID */}
-                    <div className="p-4 flex flex-col justify-center">
-                        <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wider font-semibold flex items-center gap-2">
-                            <Hash className="h-4 w-4" /> Asset ID
-                        </p>
-                        <p className="text-3xl font-mono tracking-tight font-medium">
-                            {equipment.id.toString().padStart(5, '0')}
-                        </p>
-                    </div>
-
-                    {/* Current Status */}
-                    <div className="p-4 flex flex-col justify-center">
-                        <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wider font-semibold flex items-center gap-2">
-                            <Activity children={undefined} /> State
-                        </p>
-                        <div>
-                            <span className="text-2xl font-medium tracking-tight">
-                                {equipment.status}
+                <div className="flex flex-col md:flex-row justify-between gap-8 relative z-10">
+                    {/* Left: Identity & Metadata */}
+                    <div className="flex flex-col justify-center">
+                        <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-foreground">
+                            {equipment.name}
+                        </h1>
+                        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground font-medium">
+                            <span className="bg-white/60 dark:bg-slate-800/60 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm">
+                                {equipment.typeName}
+                            </span>
+                            <span className="text-slate-300 dark:text-slate-600">•</span>
+                            <span className="flex items-center gap-1.5 font-mono bg-white/60 dark:bg-slate-800/60 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm">
+                                <Hash className="h-3.5 w-3.5 opacity-70 text-slate-500" /> {equipment.id.toString().padStart(5, '0')}
+                            </span>
+                            <span className="text-slate-300 dark:text-slate-600 hidden sm:inline">•</span>
+                            <span className="flex items-center gap-2 bg-white/60 dark:bg-slate-800/60 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm">
+                                <Clock className="h-3.5 w-3.5 opacity-70 text-slate-500" />
+                                Last Serviced: {days} day{days !== 1 ? "s" : ""} ago
+                                <span className="opacity-60 font-normal hidden lg:inline">({formatDate(equipment.lastCleanedDate)})</span>
                             </span>
                         </div>
                     </div>
 
-                    {/* Health */}
-                    <div className="p-4 flex flex-col justify-center">
-                        <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wider font-semibold flex justify-between items-center pr-4">
-                            <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4" /> Health Score</span>
-                        </p>
-                        <div className="flex flex-col gap-2.5">
-                            <div className="flex items-center justify-between pr-4">
-                                <span className={cn("text-lg font-bold tracking-tight", hConfig.colorClass)}>{hConfig.label}</span>
+                    {/* Right: Status & Health Bar */}
+                    <div className="flex flex-col items-start md:items-end gap-4 md:min-w-[320px] shrink-0">
+                        <div className="scale-110 origin-left md:origin-right">
+                            <StatusBadge status={equipment.status} />
+                        </div>
+
+                        <div className="w-full bg-white/80 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800 shadow-sm p-4 rounded-2xl flex flex-col gap-2.5 mt-2">
+                            <div className="flex items-center justify-between">
+                                <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                                    <ShieldCheck className="h-3.5 w-3.5" /> Health Score
+                                </span>
+                                <span className={cn("text-xs font-bold tracking-wide", hConfig.colorClass)}>
+                                    {hConfig.label}
+                                </span>
                             </div>
-                            <div className="h-2.5 w-full md:w-5/6 overflow-hidden rounded-full bg-muted border">
+                            <div className="h-2.5 w-full overflow-hidden rounded-full bg-muted border border-black/5 dark:border-white/5">
                                 <div className={cn("h-full transition-all", hConfig.barClass, hConfig.width)} />
                             </div>
-                        </div>
-                    </div>
-
-                    {/* Last Serviced */}
-                    <div className="p-4 flex flex-col justify-center">
-                        <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wider font-semibold flex items-center gap-2">
-                            <Clock className="h-4 w-4" /> Last Serviced
-                        </p>
-                        <div className="flex flex-col">
-                            <span className="text-3xl font-medium tracking-tight">
-                                {days} day{days !== 1 ? "s" : ""} ago
-                            </span>
-                            <span className="text-sm text-muted-foreground mt-1">
-                                {formatDate(equipment.lastCleanedDate)}
-                            </span>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Split Main Content */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mt-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mt-6 items-start">
 
                 {/* Log Maintenance Form */}
-                <div className="section-panel p-6 md:p-10 border-zinc-200/60 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/20 shadow-sm relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-8 opacity-5 overflow-hidden mix-blend-multiply dark:mix-blend-screen pointer-events-none">
+                <div className="section-panel p-6 md:p-10 border-emerald-100/80 dark:border-emerald-900/30 bg-emerald-50/30 dark:bg-emerald-950/10 shadow-sm relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-8 text-emerald-600/5 dark:text-emerald-400/5 overflow-hidden mix-blend-multiply dark:mix-blend-screen pointer-events-none">
                         <PenLine className="h-48 w-48 -mr-12 -mt-12 scale-110" />
                     </div>
 
-                    <div className="mb-8 flex items-center gap-3 border-b border-zinc-200 dark:border-zinc-800 pb-5">
-                        <div className="p-2.5 bg-zinc-200/50 dark:bg-zinc-800/50 rounded-xl text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700 shadow-sm">
+                    <div className="mb-8 flex items-center gap-3 border-b border-emerald-100 dark:border-emerald-900/30 pb-5">
+                        <div className="p-2.5 bg-emerald-100/50 dark:bg-emerald-900/40 rounded-xl text-emerald-700 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-800/50 shadow-sm">
                             <PenLine className="h-5 w-5" />
                         </div>
                         <div>
@@ -226,10 +208,10 @@ export default function EquipmentDetailsPage({ params }: { params: Promise<{ id:
                 </div>
 
                 {/* Maintenance Timeline */}
-                <div className="section-panel p-6 md:p-10 shadow-sm">
-                    <div className="flex items-center justify-between mb-8 border-b border-zinc-200 dark:border-zinc-800 pb-5">
+                <div className="section-panel p-6 md:p-10 shadow-sm bg-indigo-50/30 dark:bg-indigo-950/10 border-indigo-100/60 dark:border-indigo-900/30">
+                    <div className="flex items-center justify-between mb-8 border-b border-indigo-100 dark:border-indigo-900/30 pb-5">
                         <div className="flex items-center gap-3">
-                            <div className="p-2.5 bg-zinc-100 dark:bg-zinc-800/80 rounded-xl text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800">
+                            <div className="p-2.5 bg-indigo-100/50 dark:bg-indigo-900/40 rounded-xl text-indigo-700 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-800/50">
                                 <History className="h-5 w-5" />
                             </div>
                             <div>

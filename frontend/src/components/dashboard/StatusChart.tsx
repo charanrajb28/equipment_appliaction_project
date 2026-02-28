@@ -7,11 +7,11 @@ interface StatusChartProps {
     equipment: Equipment[];
 }
 
-// Flat, muted colors for professional look
+// Semantic colors for clear status visibility
 const STATUS_CONFIG = [
-    { key: "Active", color: "#18181b" }, // Zinc 900
-    { key: "Inactive", color: "#a1a1aa" }, // Zinc 400
-    { key: "Under Maintenance", color: "#52525b" }, // Zinc 600
+    { key: "Active", color: "#10b981" }, // Emerald 500
+    { key: "Inactive", color: "#f43f5e" }, // Rose 500
+    { key: "Under Maintenance", color: "#f59e0b" }, // Amber 500
 ];
 
 export function StatusChart({ equipment }: StatusChartProps) {
