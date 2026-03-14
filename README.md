@@ -119,3 +119,5 @@ CREATE DATABASE pharma_track_db;
 
 ## 🔒 Governance & Support
 This documentation is maintained as part of the system's technical governance. For operational support or regulatory inquiries, refer to the `COMPLIANCE.md` file located in the root repository.
+
+psql -U postgres -d equipment_db -f db/schema.sql

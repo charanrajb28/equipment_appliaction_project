@@ -178,16 +178,7 @@ export function EquipmentTable({
                             : " total"}
                     </p>
                 </div>
-                <Button
-                    onClick={() => {
-                        setEditTarget(null);
-                        setFormOpen(true);
-                    }}
-                    className="shrink-0"
-                >
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Equipment
-                </Button>
+
             </div>
 
             {/* Quick-filter tabs */}

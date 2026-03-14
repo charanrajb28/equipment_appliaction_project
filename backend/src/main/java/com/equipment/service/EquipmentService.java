@@ -18,7 +18,9 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class EquipmentService {
+public class 
+
+EquipmentService {
 
     private static final Set<String> VALID_STATUSES = Set.of("Active", "Inactive", "Under Maintenance");
 

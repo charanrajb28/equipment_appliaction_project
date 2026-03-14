@@ -12,7 +12,7 @@ import {
 import type { Equipment, EquipmentType, MaintenanceLog } from "@/lib/types";
 import { getEquipment, getEquipmentTypes, getMaintenanceLogs } from "@/lib/api";
 import { isOverdue } from "@/lib/dateUtils";
-
+import { Plus } from "lucide-react";
 import { OverdueAlert } from "@/components/dashboard/OverdueAlert";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { StatusChart } from "@/components/dashboard/StatusChart";
@@ -20,6 +20,13 @@ import { GlobalLogsTable } from "@/components/dashboard/GlobalLogsTable";
 import { EquipmentTable } from "@/components/equipment/EquipmentTable";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { EquipmentForm } from "@/components/equipment/EquipmentForm";
 import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
@@ -97,7 +104,8 @@ export default function DashboardPage() {
       className: overdueCount > 0 ? "border-t-2 border-t-red-500/50" : "",
     },
   ];
-
+  const [editTarget, setEditTarget] = useState<Equipment | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
   return (
     <div className="space-y-8 md:space-y-12 pb-12">
       {/* ── Toolbar Header ── */}
@@ -155,8 +163,18 @@ export default function DashboardPage() {
       <div className="grid gap-6 lg:gap-8 xl:gap-10 xl:grid-cols-3 items-start">
         {/* Table taking 2/3 space */}
         <div className="xl:col-span-2 section-panel opacity-0 animate-fade-in delay-150 relative bg-slate-50/30 dark:bg-slate-950/10 border-slate-100 dark:border-slate-800/60">
-          <div className="p-6 md:px-8 bg-slate-100/50 dark:bg-slate-900/40 border-b border-slate-200/60 dark:border-slate-800">
+          <div className="p-6 md:px-8 bg-slate-100/50 dark:bg-slate-900/40 border-b border-slate-200/60 dark:border-slate-800 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Equipment Roster</h2>
+            <Button
+              onClick={() => {
+                setEditTarget(null);
+                setFormOpen(true);
+              }}
+              className="shrink-0"
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Add Equipment
+            </Button>
           </div>
           <div className="p-6 md:p-8 overflow-x-auto">
             <EquipmentTable
@@ -191,6 +209,25 @@ export default function DashboardPage() {
           <GlobalLogsTable logs={allLogs} equipment={equipment} types={types} />
         </div>
       </div>
+      {/* ── Add / Edit Dialog ── */}
+      <Dialog open={formOpen} onOpenChange={setFormOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {editTarget ? "Edit Equipment" : "Add New Equipment"}
+            </DialogTitle>
+          </DialogHeader>
+          <EquipmentForm
+            initialData={editTarget ?? undefined}
+            types={types}
+            onSuccess={() => {
+              setFormOpen(false);
+              fetchAll(true);
+            }}
+            onCancel={() => setFormOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
