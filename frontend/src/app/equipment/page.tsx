@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, use, Activity } from "react";
+import { useEffect, useState, useCallback, use, Activity, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -36,7 +36,7 @@ const healthConfig: Record<
     Overdue: { label: "Overdue", colorClass: "text-red-600 dark:text-red-400", barClass: "bg-red-500", width: "w-1/4" },
 };
 
-export default function EquipmentDetailsPage() {
+function EquipmentDetailsContent() {
     const searchParams = useSearchParams();
     const idParam = searchParams.get("id");
     const equipmentId = idParam ? Number(idParam) : null;
@@ -136,5 +136,13 @@ export default function EquipmentDetailsPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function EquipmentDetailsPage() {
+    return (
+        <Suspense fallback={<div className="p-12 text-center text-muted-foreground">Loading...</div>}>
+            <EquipmentDetailsContent />
+        </Suspense>
     );
 }
