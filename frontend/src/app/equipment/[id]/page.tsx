@@ -1,5 +1,12 @@
 "use client";
+
+// This tells Next.js to allow these paths to be resolved at runtime
 export const dynamicParams = true;
+
+// This satisfies the 'output: export' build check
+export function generateStaticParams() {
+    return [];
+}
 
 import { useEffect, useState, useCallback, use, Activity } from "react";
 import Link from "next/link";
