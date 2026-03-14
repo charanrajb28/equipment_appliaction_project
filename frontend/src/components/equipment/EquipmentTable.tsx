@@ -331,7 +331,7 @@ export function EquipmentTable({
                                                             size="icon"
                                                             className="h-8 w-8"
                                                             onClick={() => {
-                                                                router.push(`/equipment/${eq.id}`);
+                                                                router.push(`/equipment?id=${eq.id}`);
                                                             }}
                                                         >
                                                             <Eye className="h-4 w-4" />
