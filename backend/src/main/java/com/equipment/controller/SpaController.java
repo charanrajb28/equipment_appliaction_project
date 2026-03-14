@@ -10,8 +10,12 @@ public class SpaController {
      * Forwards all non-API and non-file requests to index.html 
      * so that Next.js client-side routing works.
      */
-    @RequestMapping(value = { "{path:[^\\\\.]*}", "/**/{path:[^\\\\.]*}" })
-    public String forward() {
+    @RequestMapping(value = { "{path:[^\\.]*}", "/**/{path:[^\\.]*}" })
+    public String forward(jakarta.servlet.http.HttpServletRequest request) {
+        String path = request.getRequestURI();
+        if (path.startsWith("/api")) {
+            return "forward:" + path;
+        }
         return "forward:/index.html";
     }
 }

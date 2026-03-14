@@ -1,4 +1,5 @@
 "use client";
+export const dynamicParams = true;
 
 import { useEffect, useState, useCallback, use, Activity } from "react";
 import Link from "next/link";
