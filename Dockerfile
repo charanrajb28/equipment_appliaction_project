@@ -29,4 +29,4 @@ COPY --from=backend-build /backend/target/*.jar app.jar
 COPY --from=backend-build /backend/global-bundle.pem global-bundle.pem
 
 EXPOSE 8080
-ENTRYPOINT ["sh", "-c", "java -Xmx350m -Xss512k -Djava.security.egd=file:/dev/./urandom -Dserver.port=${PORT:8080} -jar app.jar"]
+ENTRYPOINT ["sh", "-c", "java -Xmx350m -Xss512k -Djava.security.egd=file:/dev/./urandom -Dserver.port=${PORT:-8080} -jar app.jar"]
