@@ -1,21 +1,25 @@
 package com.equipment.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+@Configuration
 public class SpaController {
 
-    /**
-     * Forwards all non-API and non-file requests to index.html 
-     * so that Next.js client-side routing works.
-     */
-    @RequestMapping(value = { "/", "/{path:[^\\.]*}", "/**/{path:[^\\.]*}" })
-    public String forward(jakarta.servlet.http.HttpServletRequest request) {
-        String path = request.getRequestURI();
-        if (path.startsWith("/api") || path.contains(".")) {
-            return "forward:" + path;
-        }
-        return "forward:/index.html";
+    @Bean
+    public ErrorViewResolver spaErrorViewResolver() {
+        return (request, status, model) -> {
+            // Forward 404s (Route not found) to the Next.js index.html
+            if (status == HttpStatus.NOT_FOUND) {
+                String path = (String) model.get("path");
+                if (path != null && !path.startsWith("/api") && !path.contains(".")) {
+                    return new ModelAndView("forward:/index.html");
+                }
+            }
+            return null;
+        };
     }
 }
