@@ -29,4 +29,4 @@ COPY --from=backend-build /backend/target/*.jar app.jar
 COPY --from=backend-build /backend/global-bundle.pem global-bundle.pem
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-Dserver.port=${PORT:8080}", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx256m", "-Xms128m", "-Dserver.port=${PORT:8080}", "-jar", "app.jar"]
