@@ -7,7 +7,7 @@ COPY frontend/ ./
 # Hardcode the production API URL or use an environment variable
 ENV NEXT_PUBLIC_API_URL=/
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npx next build --no-lint
+RUN npm run build
 
 # --- Phase 2: Build Backend ---
 FROM maven:3.9-eclipse-temurin-17 AS backend-build
